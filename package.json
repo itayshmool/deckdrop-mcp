@@ -1,0 +1,31 @@
+{
+  "name": "deckdrop-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for DeckDrop Pro — deploy presentation decks from AI coding tools",
+  "main": "index.js",
+  "bin": {
+    "deckdrop-mcp": "index.js"
+  },
+  "keywords": [
+    "mcp",
+    "deckdrop",
+    "presentations",
+    "model-context-protocol",
+    "claude-code",
+    "cursor",
+    "ai-tools"
+  ],
+  "author": "Itay Shmool",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itayshmool/deckdrop-mcp"
+  },
+  "homepage": "https://deckdrop.live",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  }
+}
