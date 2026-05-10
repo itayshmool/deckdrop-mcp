@@ -7,9 +7,11 @@ const { StdioServerTransport } = require(path.join(sdkBase, 'server', 'stdio.js'
 const { ListToolsRequestSchema, CallToolRequestSchema } = require(path.join(sdkBase, 'types.js'));
 
 const { tools, handleTool } = require('./tools');
+const checkForUpdates = require('./update-check');
+const PKG = require('../package.json');
 
 const server = new Server(
-  { name: 'deckdrop', version: '1.0.0' },
+  { name: 'deckdrop', version: PKG.version },
   { capabilities: { tools: {} } }
 );
 
@@ -34,6 +36,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
+  // Non-blocking update check after server is running
+  checkForUpdates();
 }
 
 main().catch((err) => {
