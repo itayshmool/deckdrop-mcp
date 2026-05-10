@@ -97,6 +97,18 @@ Change a deck's visibility.
 - `slug` (required) — The deck's slug
 - `visibility` (required) — `"public"` or `"private"`
 
+### `list_themes`
+
+List available preset themes with CSS variables, fonts, and design guidelines. Use this to choose a theme before generating a deck.
+
+**Parameters:**
+- `id` (optional) — Theme ID to get full details (e.g. `"dark-tech"`, `"data-terminal"`). Omit to list all 16 themes.
+
+**Available themes:** `dark-editorial`, `dark-tech`, `light-mono`, `minimal-light`, `corporate-blue`, `warm-earth`, `neon-noir`, `paper-ink`, `ocean-depth`, `sunset-gradient`, `arctic-frost`, `forest-canopy`, `slate-rose`, `retro-terminal`, `sand-stone`, `data-terminal`
+
+**Example prompt:**
+> "Show me all DeckDrop themes" or "Get the dark-tech theme details"
+
 ## Environment Variables
 
 | Variable | Required | Description |

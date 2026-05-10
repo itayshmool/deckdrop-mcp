@@ -1,4 +1,5 @@
 const api = require('./api');
+const themes = require('./themes');
 
 const tools = [
   {
@@ -93,6 +94,23 @@ const tools = [
         },
       },
       required: ['slug', 'visibility'],
+    },
+  },
+  {
+    name: 'list_themes',
+    description:
+      'List available DeckDrop preset themes with their CSS variables, fonts, and design guidelines. ' +
+      'Use this to choose a theme before generating a deck with deploy_deck. ' +
+      'Each theme includes complete CSS custom properties, Google Fonts URL, and styling notes.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+          description:
+            'Optional theme ID to get details for a specific theme (e.g. "dark-tech", "data-terminal"). Omit to list all themes.',
+        },
+      },
     },
   },
 ];
@@ -258,6 +276,35 @@ async function handleTool(name, args) {
             text: `Deck "${updated.name}" visibility changed to "${args.visibility}".`,
           },
         ],
+      };
+    }
+
+    case 'list_themes': {
+      if (args.id) {
+        const theme = themes.find(t => t.id === args.id);
+        if (!theme) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Theme "${args.id}" not found. Use list_themes without an id to see all available themes.`,
+              },
+            ],
+            isError: true,
+          };
+        }
+        return {
+          content: [{ type: 'text', text: JSON.stringify(theme, null, 2) }],
+        };
+      }
+
+      const summary = themes.map(t => ({
+        id: t.id,
+        name: t.name,
+        bestFor: t.bestFor,
+      }));
+      return {
+        content: [{ type: 'text', text: JSON.stringify(summary, null, 2) }],
       };
     }
 
