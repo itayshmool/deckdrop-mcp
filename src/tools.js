@@ -1,6 +1,14 @@
 const api = require('./api');
 const themes = require('./themes');
 
+const SITE_URL = process.env.DECKDROP_API_URL || 'https://deckdrop.live';
+
+function fullUrl(path) {
+  if (!path) return path;
+  if (path.startsWith('http')) return path;
+  return `${SITE_URL}${path}`;
+}
+
 const tools = [
   {
     name: 'deploy_deck',
@@ -133,7 +141,7 @@ async function handleTool(name, args) {
                 {
                   status: 'updated',
                   message: `Deck "${updated.name}" updated successfully`,
-                  url: updated.url,
+                  url: fullUrl(updated.url),
                   name: updated.name,
                   slug: updated.slug,
                   slide_count: updated.slide_count,
@@ -164,7 +172,7 @@ async function handleTool(name, args) {
               {
                 status: 'created',
                 message: `Deck "${deck.name}" deployed successfully`,
-                url: deck.url,
+                url: fullUrl(deck.url),
                 name: deck.name,
                 slug: deck.slug,
                 slide_count: deck.slide_count,
@@ -184,7 +192,7 @@ async function handleTool(name, args) {
       const summary = decks.map(d => ({
         name: d.name,
         slug: d.slug,
-        url: d.url,
+        url: fullUrl(d.url),
         visibility: d.visibility,
         slide_count: d.slide_count,
         html_size: d.html_size,
@@ -222,7 +230,7 @@ async function handleTool(name, args) {
               {
                 name: deck.name,
                 slug: deck.slug,
-                url: deck.url,
+                url: fullUrl(deck.url),
                 visibility: deck.visibility,
                 slide_count: deck.slide_count,
                 html_size: deck.html_size,
