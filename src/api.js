@@ -98,4 +98,8 @@ async function updateDeck(deckId, updates) {
   return request('PUT', `/api/decks/${deckId}`, updates);
 }
 
-module.exports = { listDecks, uploadDeck, updateDeckHtml, deleteDeck, updateDeck };
+async function addViewers(deckId, entries) {
+  return request('POST', `/api/decks/${deckId}/viewers`, { entries });
+}
+
+module.exports = { listDecks, uploadDeck, updateDeckHtml, deleteDeck, updateDeck, addViewers };

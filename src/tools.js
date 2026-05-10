@@ -1,3 +1,4 @@
+const fs = require('fs');
 const api = require('./api');
 const themes = require('./themes');
 
@@ -14,7 +15,7 @@ const tools = [
     name: 'deploy_deck',
     description:
       'Deploy a presentation deck to DeckDrop Pro. Creates a new deck or updates an existing one. ' +
-      'The HTML should be a complete, self-contained HTML file with all CSS and JS embedded. ' +
+      'Provide HTML via the "file" parameter (preferred for large decks) or the "html" parameter. ' +
       'Returns the live URL where the deck is accessible.',
     inputSchema: {
       type: 'object',
@@ -28,9 +29,17 @@ const tools = [
           description:
             'URL-safe identifier for the deck. Lowercase letters, numbers, and hyphens only (e.g. "q3-product-update")',
         },
+        file: {
+          type: 'string',
+          description:
+            'Absolute path to an HTML file on disk. Preferred over "html" for large decks — ' +
+            'write the deck to a file first, then pass the path here. Mutually exclusive with "html".',
+        },
         html: {
           type: 'string',
-          description: 'Complete HTML content of the deck — a single self-contained file with embedded CSS and JS',
+          description:
+            'Complete HTML content of the deck as a string. For large decks, prefer using "file" instead ' +
+            'to avoid passing the entire content through the tool call.',
         },
         visibility: {
           type: 'string',
@@ -38,7 +47,7 @@ const tools = [
           description: 'Deck visibility. "public" = anyone with the link can view. "private" = only whitelisted viewers. Defaults to "public".',
         },
       },
-      required: ['name', 'slug', 'html'],
+      required: ['name', 'slug'],
     },
   },
   {
@@ -105,6 +114,29 @@ const tools = [
     },
   },
   {
+    name: 'add_viewers',
+    description:
+      'Add viewers to a private deck\'s whitelist. Viewers can be individual email addresses ' +
+      'or @domain entries (e.g. "@company.com" to allow everyone at that domain). ' +
+      'Only applies to private decks — public decks are accessible to anyone.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        slug: {
+          type: 'string',
+          description: 'The slug of the deck to add viewers to',
+        },
+        viewers: {
+          type: 'array',
+          items: { type: 'string' },
+          description:
+            'List of email addresses or @domain entries to whitelist (e.g. ["alice@example.com", "@company.com"])',
+        },
+      },
+      required: ['slug', 'viewers'],
+    },
+  },
+  {
     name: 'list_themes',
     description:
       'List available DeckDrop preset themes with their CSS variables, fonts, and design guidelines. ' +
@@ -126,13 +158,31 @@ const tools = [
 async function handleTool(name, args) {
   switch (name) {
     case 'deploy_deck': {
+      // Resolve HTML content from file or inline
+      let html = args.html;
+      if (args.file) {
+        if (html) {
+          return {
+            content: [{ type: 'text', text: 'Provide either "file" or "html", not both.' }],
+            isError: true,
+          };
+        }
+        html = fs.readFileSync(args.file, 'utf8');
+      }
+      if (!html) {
+        return {
+          content: [{ type: 'text', text: 'Either "file" or "html" is required.' }],
+          isError: true,
+        };
+      }
+
       // Check if deck already exists
       const decks = await api.listDecks();
       const existing = decks.find(d => d.slug === args.slug);
 
       if (existing) {
         // Update existing deck
-        const updated = await api.updateDeckHtml(existing.id, args.html);
+        const updated = await api.updateDeckHtml(existing.id, html);
         return {
           content: [
             {
@@ -160,7 +210,7 @@ async function handleTool(name, args) {
       const deck = await api.uploadDeck({
         name: args.name,
         slug: args.slug,
-        html: args.html,
+        html,
         visibility: args.visibility || 'public',
       });
 
@@ -282,6 +332,27 @@ async function handleTool(name, args) {
           {
             type: 'text',
             text: `Deck "${updated.name}" visibility changed to "${args.visibility}".`,
+          },
+        ],
+      };
+    }
+
+    case 'add_viewers': {
+      const decks = await api.listDecks();
+      const deck = decks.find(d => d.slug === args.slug);
+      if (!deck) {
+        return {
+          content: [{ type: 'text', text: `Deck with slug "${args.slug}" not found.` }],
+          isError: true,
+        };
+      }
+
+      const result = await api.addViewers(deck.id, args.viewers);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Added ${result.added} viewer(s) to "${deck.name}".`,
           },
         ],
       };

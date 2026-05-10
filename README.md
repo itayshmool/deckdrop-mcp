@@ -65,8 +65,11 @@ Deploy a presentation deck. Creates a new deck or updates an existing one.
 **Parameters:**
 - `name` (required) — Display name for the deck
 - `slug` (required) — URL-safe identifier (lowercase, hyphens)
-- `html` (required) — Complete HTML content (self-contained, embedded CSS/JS)
+- `file` — Absolute path to an HTML file on disk (preferred for large decks)
+- `html` — Complete HTML content as a string
 - `visibility` (optional) — `"public"` (default) or `"private"`
+
+> Provide either `file` or `html`. For large decks, `file` is faster — write the HTML to disk first, then pass the path.
 
 **Example prompt:**
 > "Create a presentation about our Q3 results and deploy it to DeckDrop with slug q3-update"
@@ -96,6 +99,14 @@ Change a deck's visibility.
 **Parameters:**
 - `slug` (required) — The deck's slug
 - `visibility` (required) — `"public"` or `"private"`
+
+### `add_viewers`
+
+Add viewers to a private deck's whitelist. Supports individual emails and @domain entries.
+
+**Parameters:**
+- `slug` (required) — The deck's slug
+- `viewers` (required) — Array of email addresses or @domain entries (e.g. `["alice@example.com", "@company.com"]`)
 
 ### `list_themes`
 

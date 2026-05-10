@@ -2,6 +2,14 @@
 // Shown to users when their installed version is behind.
 const releases = [
   {
+    version: '1.3.0',
+    date: '2026-05-10',
+    notes: [
+      'New tool: add_viewers — add email or @domain entries to a private deck\'s viewer whitelist',
+      'deploy_deck now accepts a "file" parameter — pass a local file path instead of inline HTML for faster deploys of large decks',
+    ],
+  },
+  {
     version: '1.2.0',
     date: '2026-05-10',
     notes: [
