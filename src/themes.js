@@ -29,6 +29,7 @@ const themes = [
     listMarkers: 'Gold diamond rotated 45deg',
     closingSlide: 'Dark background (var(--dark)), gold heading',
     designNotes: 'Classic editorial feel with serif body text and bold uppercase headings.',
+    designSystem: { palette: { mode: 'light', bg: '#ffffff', text: '#2d2d2d', accent: '#d4a847', secondary: '#c41e3a' }, fonts: { display: 'Bebas Neue', body: 'Crimson Text', mono: 'JetBrains Mono' }, headingStyle: 'uppercase-spaced', radius: 10 },
   },
   {
     id: 'dark-tech',
@@ -60,6 +61,7 @@ const themes = [
     listMarkers: 'Lime green circle',
     closingSlide: 'Lime green heading on dark bg, no inversion needed',
     designNotes: 'Dark mode with lime green accents. Slide transition uses translateX(20px) + opacity.',
+    designSystem: { palette: { mode: 'dark', bg: '#0a0a0a', text: '#ffffff', accent: '#deff9a', secondary: '#60a5fa' }, fonts: { display: 'Urbanist', body: 'Inter', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'light-mono',
@@ -91,6 +93,7 @@ const themes = [
     listMarkers: 'Yellow highlight tags',
     closingSlide: 'Dark bg (var(--dark)), yellow accent heading',
     designNotes: 'All-monospace theme. Prefer data-row grid layout (key-value pairs) over cards for data-dense content.',
+    designSystem: { palette: { mode: 'light', bg: '#fafafa', text: '#171717', accent: '#ca8a04', secondary: '#171717' }, fonts: { display: 'JetBrains Mono', body: 'JetBrains Mono', mono: 'JetBrains Mono' }, headingStyle: 'uppercase-spaced', radius: 10 },
   },
   {
     id: 'minimal-light',
@@ -122,6 +125,7 @@ const themes = [
     listMarkers: 'Blue circle',
     closingSlide: 'Dark navy bg (var(--dark)), white heading, blue accent',
     designNotes: 'Clean, no uppercase headings. Good default for any presentation.',
+    designSystem: { palette: { mode: 'light', bg: '#ffffff', text: '#1e293b', accent: '#2563eb', secondary: '#7c3aed' }, fonts: { display: 'Inter', body: 'Inter', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'corporate-blue',
@@ -153,6 +157,7 @@ const themes = [
     listMarkers: 'Blue square',
     closingSlide: 'Dark navy bg (var(--dark)), white heading, blue accent bar',
     designNotes: 'Professional corporate look with blue tones and readable body font.',
+    designSystem: { palette: { mode: 'light', bg: '#f8fbff', text: '#1e2a3a', accent: '#2563eb', secondary: '#0f766e' }, fonts: { display: 'Inter', body: 'Source Sans 3', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'warm-earth',
@@ -184,6 +189,7 @@ const themes = [
     listMarkers: 'Terracotta leaf',
     closingSlide: 'Deep brown bg (var(--dark)), cream heading, terracotta accent line',
     designNotes: 'Warm, organic palette with serif headings and rounded sans-serif body.',
+    designSystem: { palette: { mode: 'light', bg: '#f7f1e8', text: '#3d2e1f', accent: '#c96f4a', secondary: '#8b5e34' }, fonts: { display: 'Lora', body: 'Nunito', mono: 'JetBrains Mono' }, headingStyle: 'weighted-clean', radius: 10 },
   },
   {
     id: 'neon-noir',
@@ -215,6 +221,7 @@ const themes = [
     listMarkers: 'Neon pink arrow',
     closingSlide: 'Deep dark bg (var(--dark)), neon pink heading with glow effect, cyan accent line',
     designNotes: 'Cyberpunk aesthetic with neon pink and cyan on deep navy. Bold geometric headings.',
+    designSystem: { palette: { mode: 'dark', bg: '#0b1020', text: '#e0e6f0', accent: '#ff4fd8', secondary: '#22d3ee' }, fonts: { display: 'Orbitron', body: 'Rajdhani', mono: 'JetBrains Mono' }, headingStyle: 'uppercase-spaced', radius: 10 },
   },
   {
     id: 'paper-ink',
@@ -246,6 +253,7 @@ const themes = [
     listMarkers: 'Ink-colored em dash',
     closingSlide: 'Dark parchment bg (var(--dark)), cream heading, ink accent underline',
     designNotes: 'Elegant editorial feel on warm parchment. Italic serif headings with clean sans-serif body.',
+    designSystem: { palette: { mode: 'light', bg: '#fcf8ef', text: '#2e2b24', accent: '#8b6f47', secondary: '#3f5c7a' }, fonts: { display: 'Playfair Display', body: 'Lato', mono: 'JetBrains Mono' }, headingStyle: 'weighted-clean', radius: 10 },
   },
   {
     id: 'ocean-depth',
@@ -277,6 +285,7 @@ const themes = [
     listMarkers: 'Teal circle',
     closingSlide: 'Deepest navy bg (var(--dark)), teal heading, blue accent wave',
     designNotes: 'Deep ocean palette with teal accents. Modern geometric headings.',
+    designSystem: { palette: { mode: 'dark', bg: '#071c2c', text: '#d4e5f7', accent: '#14b8a6', secondary: '#3b82f6' }, fonts: { display: 'Space Grotesk', body: 'DM Sans', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'sunset-gradient',
@@ -308,6 +317,7 @@ const themes = [
     listMarkers: 'Orange sun',
     closingSlide: 'Deep warm brown bg (var(--dark)), amber heading, orange accent',
     designNotes: 'Warm sunset tones with rounded, friendly typography.',
+    designSystem: { palette: { mode: 'light', bg: '#fff7ed', text: '#3c1f0e', accent: '#f97316', secondary: '#f59e0b' }, fonts: { display: 'Poppins', body: 'Quicksand', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'arctic-frost',
@@ -339,6 +349,7 @@ const themes = [
     listMarkers: 'Ice blue circle',
     closingSlide: 'Dark navy bg (var(--dark)), ice blue heading, frost accent gradient',
     designNotes: 'Cool, crisp palette with modern geometric typography. Professional and clean.',
+    designSystem: { palette: { mode: 'light', bg: '#f8fbff', text: '#1a2b40', accent: '#60a5fa', secondary: '#38bdf8' }, fonts: { display: 'Outfit', body: 'Manrope', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'forest-canopy',
@@ -370,6 +381,7 @@ const themes = [
     listMarkers: 'Gold leaf',
     closingSlide: 'Deepest forest bg (var(--dark)), gold heading, green accent underline',
     designNotes: 'Dark forest palette with warm gold accents. Serif headings for gravitas.',
+    designSystem: { palette: { mode: 'dark', bg: '#10231c', text: '#d4e6d8', accent: '#d4a373', secondary: '#4f772d' }, fonts: { display: 'Bitter', body: 'Work Sans', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'slate-rose',
@@ -401,6 +413,7 @@ const themes = [
     listMarkers: 'Rose pink circle',
     closingSlide: 'Deep slate bg (var(--dark)), rose pink heading, lavender accent line',
     designNotes: 'Dark slate with rose pink and lavender. Modern, fashion-forward feel.',
+    designSystem: { palette: { mode: 'dark', bg: '#1b1d27', text: '#e2dfe8', accent: '#f472b6', secondary: '#a78bfa' }, fonts: { display: 'Sora', body: 'Archivo', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 10 },
   },
   {
     id: 'retro-terminal',
@@ -432,6 +445,7 @@ const themes = [
     listMarkers: 'Green caret (>)',
     closingSlide: 'Pure black bg (var(--dark)), green phosphor heading with scanline effect, blinking cursor',
     designNotes: 'CRT-style green-on-black terminal aesthetic. All-monospace with phosphor glow.',
+    designSystem: { palette: { mode: 'dark', bg: '#020402', text: '#ccf5cc', accent: '#5fff87', secondary: '#2bdc74' }, fonts: { display: 'Fira Code', body: 'Fira Code', mono: 'JetBrains Mono' }, headingStyle: 'uppercase-spaced', radius: 10 },
   },
   {
     id: 'sand-stone',
@@ -463,6 +477,7 @@ const themes = [
     listMarkers: 'Sandstone dot',
     closingSlide: 'Deep sandstone bg (var(--dark)), warm gold heading, stone accent line',
     designNotes: 'Warm sandstone palette with elegant serif headings. Architectural, refined.',
+    designSystem: { palette: { mode: 'light', bg: '#f8f1e7', text: '#3a2e22', accent: '#c78b4a', secondary: '#8c6a43' }, fonts: { display: 'Cormorant Garamond', body: 'Karla', mono: 'JetBrains Mono' }, headingStyle: 'weighted-clean', radius: 10 },
   },
   {
     id: 'data-terminal',
@@ -501,6 +516,45 @@ const themes = [
       'diagnostic/verdict boxes (yellow/green/amber), blinking cursor on title slide, ' +
       'dot navigation (square dots), and grayscale photo treatment. ' +
       'Similar to light-mono but with richer data visualization patterns.',
+    designSystem: { palette: { mode: 'light', bg: '#fafafa', text: '#171717', accent: '#ca8a04', secondary: '#171717' }, fonts: { display: 'JetBrains Mono', body: 'JetBrains Mono', mono: 'JetBrains Mono' }, headingStyle: 'tight-dense', radius: 2 },
+  },
+  {
+    id: 'google-design',
+    name: 'Google Design',
+    bestFor: 'Google partnership pitches, Material Design presentations, AI/ML demos, tech product showcases',
+    fonts: 'Plus Jakarta Sans (headings), Inter (body), JetBrains Mono (code)',
+    googleFontsUrl: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap',
+    cssVariables: {
+      '--bg': '#f8f9fa',
+      '--bg-warm': '#f3f4f5',
+      '--bg-card': '#ffffff',
+      '--dark': '#191c1d',
+      '--text': '#202124',
+      '--text-secondary': '#5f6368',
+      '--text-muted': '#9aa0a6',
+      '--accent': '#0058bd',
+      '--accent-light': '#d8e2ff',
+      '--accent-bg': 'rgba(0, 88, 189, 0.05)',
+      '--secondary': '#34A853',
+      '--secondary-light': 'rgba(52, 168, 83, 0.1)',
+      '--green': '#34A853',
+      '--border': '#e1e3e4',
+      '--font-title': "'Plus Jakarta Sans', sans-serif",
+      '--font-body': "'Inter', sans-serif",
+      '--font-mono': "'JetBrains Mono', monospace",
+    },
+    headingStyle: 'font-weight: 700; letter-spacing: -0.025em;',
+    listMarkers: 'Blue filled circle',
+    closingSlide: 'Light wash bg (subtle gradient to accent tint), blue heading, glass-card contact bar',
+    designNotes:
+      'Material Design 3 inspired. Features glass cards (backdrop-filter: blur(12px)), ' +
+      'Gemini gradient accent (linear-gradient(135deg, #FFBB00, #E244D1, #4285F4)) for hero text and progress bar, ' +
+      'Google brand colors (red #EA4335, yellow #FBBC04, green #34A853, blue #4285F4) for category accents, ' +
+      'pill badges with mono uppercase labels, stat cards with large numbers, ' +
+      'connecting-line architecture diagrams, floating hero icon animation, ' +
+      'Material Symbols Outlined icons, bottom navigation bar with slide counter, ' +
+      'and safe-area support for mobile.',
+    designSystem: { palette: { mode: 'light', bg: '#f8f9fa', text: '#202124', accent: '#0058bd', secondary: '#34A853' }, fonts: { display: 'Plus Jakarta Sans', body: 'Inter', mono: 'JetBrains Mono' }, headingStyle: 'bold-clean', radius: 12 },
   },
 ];
 
