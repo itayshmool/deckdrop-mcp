@@ -7,13 +7,13 @@ MCP server for [DeckDrop Pro](https://deckdrop.live) — deploy presentation dec
 ### Claude Code
 
 ```bash
-claude mcp add deckdrop -- npx -y deckdrop-mcp
+claude mcp add deckdrop -s user -- npx -y deckdrop-mcp
 ```
 
 Then set your token:
 
 ```bash
-claude mcp update deckdrop -e DECKDROP_TOKEN=dd_your_token_here
+claude mcp update deckdrop -s user -e DECKDROP_TOKEN=dd_your_token_here
 ```
 
 Or add to `~/.claude/settings.json` manually:

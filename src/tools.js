@@ -1,4 +1,6 @@
 const fs = require('fs');
+const path = require('path');
+const os = require('os');
 const api = require('./api');
 const themes = require('./themes');
 
@@ -16,7 +18,9 @@ const tools = [
     description:
       'Deploy a presentation deck to DeckDrop Pro. Creates a new deck or updates an existing one. ' +
       'Provide HTML via the "file" parameter (preferred for large decks) or the "html" parameter. ' +
-      'Returns the live URL where the deck is accessible.',
+      'Returns the live URL where the deck is accessible. ' +
+      'IMPORTANT: Decks default to PRIVATE. To deploy as public, you MUST first ask the user for explicit confirmation, ' +
+      'then set both visibility="public" AND confirm_public=true. Never make a deck public without user approval.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -44,7 +48,14 @@ const tools = [
         visibility: {
           type: 'string',
           enum: ['public', 'private'],
-          description: 'Deck visibility. "public" = anyone with the link can view. "private" = only whitelisted viewers. Defaults to "public".',
+          description: 'Deck visibility. "public" = anyone with the link can view. "private" = only whitelisted viewers. Defaults to "private".',
+        },
+        confirm_public: {
+          type: 'boolean',
+          description:
+            'Required safety flag. Must be set to true when visibility is "public". ' +
+            'You MUST ask the user for explicit permission before setting this to true. ' +
+            'The tool will reject public deployments without this flag.',
         },
       },
       required: ['name', 'slug'],
@@ -96,7 +107,9 @@ const tools = [
     name: 'update_visibility',
     description:
       'Change a deck\'s visibility without re-uploading the HTML content. ' +
-      'Set to "public" to allow anyone with the link to view, or "private" to restrict to whitelisted viewers only.',
+      'Set to "public" to allow anyone with the link to view, or "private" to restrict to whitelisted viewers only. ' +
+      'IMPORTANT: Changing to public requires explicit user confirmation. ' +
+      'You MUST ask the user before making any deck public, then set confirm_public=true.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -108,6 +121,11 @@ const tools = [
           type: 'string',
           enum: ['public', 'private'],
           description: 'New visibility setting',
+        },
+        confirm_public: {
+          type: 'boolean',
+          description:
+            'Required when changing to "public". Must be true to confirm the user approved making this deck public.',
         },
       },
       required: ['slug', 'visibility'],
@@ -153,6 +171,18 @@ const tools = [
       },
     },
   },
+  {
+    name: 'install_skill',
+    description:
+      'Install or update the DeckDrop skill for Claude Code. ' +
+      'The skill teaches your agent how to generate polished, DeckDrop-compliant presentations ' +
+      'with 18 preset themes, accessibility, navigation, and presenter features. ' +
+      'After installing, use /deckdrop to generate decks.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
 ];
 
 async function handleTool(name, args) {
@@ -172,6 +202,20 @@ async function handleTool(name, args) {
       if (!html) {
         return {
           content: [{ type: 'text', text: 'Either "file" or "html" is required.' }],
+          isError: true,
+        };
+      }
+
+      const visibility = args.visibility || 'private';
+
+      if (visibility === 'public' && !args.confirm_public) {
+        return {
+          content: [{
+            type: 'text',
+            text: 'SECURITY: You are about to deploy this deck as PUBLIC (anyone with the link can view it). ' +
+              'Please ask the user to confirm they want this deck to be publicly accessible, ' +
+              'then call deploy_deck again with confirm_public=true.',
+          }],
           isError: true,
         };
       }
@@ -211,7 +255,7 @@ async function handleTool(name, args) {
         name: args.name,
         slug: args.slug,
         html,
-        visibility: args.visibility || 'public',
+        visibility,
       });
 
       return {
@@ -317,6 +361,18 @@ async function handleTool(name, args) {
     }
 
     case 'update_visibility': {
+      if (args.visibility === 'public' && !args.confirm_public) {
+        return {
+          content: [{
+            type: 'text',
+            text: 'SECURITY: You are about to make this deck PUBLIC (anyone with the link can view it). ' +
+              'Please ask the user to confirm they want this deck to be publicly accessible, ' +
+              'then call update_visibility again with confirm_public=true.',
+          }],
+          isError: true,
+        };
+      }
+
       const decks = await api.listDecks();
       const deck = decks.find(d => d.slug === args.slug);
       if (!deck) {
@@ -384,6 +440,42 @@ async function handleTool(name, args) {
       }));
       return {
         content: [{ type: 'text', text: JSON.stringify(summary, null, 2) }],
+      };
+    }
+
+    case 'install_skill': {
+      const skillUrl = `${SITE_URL}/api/skill/deckdrop`;
+      const res = await fetch(skillUrl);
+      if (!res.ok) {
+        throw new Error(`Failed to fetch skill from ${skillUrl}: ${res.status}`);
+      }
+      const content = await res.text();
+
+      const skillDir = path.join(os.homedir(), '.claude', 'skills', 'deckdrop');
+      fs.mkdirSync(skillDir, { recursive: true });
+
+      const skillPath = path.join(skillDir, 'SKILL.md');
+      const existed = fs.existsSync(skillPath);
+      fs.writeFileSync(skillPath, content, 'utf8');
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                status: existed ? 'updated' : 'installed',
+                message: existed
+                  ? 'DeckDrop skill updated successfully. Use /deckdrop to generate decks.'
+                  : 'DeckDrop skill installed successfully. Use /deckdrop to generate decks.',
+                path: skillPath,
+                size: content.length,
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
